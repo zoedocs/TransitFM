@@ -1,0 +1,75 @@
+{
+  "example": "Create a Work Order - HVAC Filter Replacement",
+  "description": "This example demonstrates how to create a new preventive maintenance work order for HVAC filter replacement using the TransitFM API.",
+  "endpoint": "POST https://api.transitfm.io/v1/work-orders",
+  "authentication": {
+    "method": "Bearer Token",
+    "header": "Authorization: Bearer YOUR_API_KEY"
+  },
+  "request": {
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer YOUR_API_KEY"
+    },
+    "body": {
+      "title": "HVAC Filter Replacement - Building A",
+      "description": "Replace main HVAC filter in Building A with MERV-13 rated filter. Check filter pressure drop gauge and document readings.",
+      "facility_id": "fac-789",
+      "category": "preventive",
+      "priority": "medium",
+      "assigned_to_id": "user-456",
+      "estimated_hours": 1.5,
+      "due_date": "2026-08-31T17:00:00Z",
+      "notes": "Use MERV-13 filters. Building A main entrance lobby. Contact facility manager before starting work."
+    }
+  },
+  "response": {
+    "status": 201,
+    "status_text": "Created",
+    "body": {
+      "id": "wo-12345",
+      "title": "HVAC Filter Replacement - Building A",
+      "description": "Replace main HVAC filter in Building A with MERV-13 rated filter. Check filter pressure drop gauge and document readings.",
+      "facility_id": "fac-789",
+      "facility": {
+        "id": "fac-789",
+        "name": "Building A - Main Campus",
+        "location": "123 Main Street, Suite 100"
+      },
+      "category": "preventive",
+      "priority": "medium",
+      "status": "open",
+      "assigned_to_id": "user-456",
+      "assigned_to": {
+        "id": "user-456",
+        "name": "John Smith",
+        "email": "john.smith@example.com",
+        "role": "technician"
+      },
+      "estimated_hours": 1.5,
+      "due_date": "2026-08-31T17:00:00Z",
+      "created_at": "2026-08-24T10:30:00Z",
+      "updated_at": "2026-08-24T10:30:00Z",
+      "notes": "Use MERV-13 filters. Building A main entrance lobby. Contact facility manager before starting work.",
+      "work_order_number": "WO-2026-00012345"
+    }
+  },
+  "curl_example": "curl -X POST https://api.transitfm.io/v1/work-orders \\\n  -H 'Content-Type: application/json' \\\n  -H 'Authorization: Bearer YOUR_API_KEY' \\\n  -d '{\n    \"title\": \"HVAC Filter Replacement - Building A\",\n    \"description\": \"Replace main HVAC filter in Building A with MERV-13 rated filter. Check filter pressure drop gauge and document readings.\",\n    \"facility_id\": \"fac-789\",\n    \"category\": \"preventive\",\n    \"priority\": \"medium\",\n    \"assigned_to_id\": \"user-456\",\n    \"estimated_hours\": 1.5,\n    \"due_date\": \"2026-08-31T17:00:00Z\",\n    \"notes\": \"Use MERV-13 filters. Building A main entrance lobby. Contact facility manager before starting work.\"\n  }'",
+  "python_example": "import requests\nimport json\nfrom datetime import datetime, timedelta\n\n# API Configuration\napi_key = 'YOUR_API_KEY'\nbase_url = 'https://api.transitfm.io/v1'\nheaders = {\n    'Content-Type': 'application/json',\n    'Authorization': f'Bearer {api_key}'\n}\n\n# Work Order Data\nwork_order = {\n    'title': 'HVAC Filter Replacement - Building A',\n    'description': 'Replace main HVAC filter in Building A with MERV-13 rated filter. Check filter pressure drop gauge and document readings.',\n    'facility_id': 'fac-789',\n    'category': 'preventive',\n    'priority': 'medium',\n    'assigned_to_id': 'user-456',\n    'estimated_hours': 1.5,\n    'due_date': (datetime.now() + timedelta(days=7)).isoformat() + 'Z',\n    'notes': 'Use MERV-13 filters. Building A main entrance lobby. Contact facility manager before starting work.'\n}\n\n# Create Work Order\nresponse = requests.post(\n    f'{base_url}/work-orders',\n    headers=headers,\n    json=work_order\n)\n\nif response.status_code == 201:\n    created_wo = response.json()\n    print(f'Work Order Created: {created_wo[\"id\"]}')\n    print(f'Status: {created_wo[\"status\"]}')\n    print(f'Assigned To: {created_wo[\"assigned_to\"][\"name\"]}')\nelse:\n    print(f'Error: {response.status_code}')\n    print(response.json())",
+  "javascript_example": "const axios = require('axios');\n\n// API Configuration\nconst API_KEY = 'YOUR_API_KEY';\nconst BASE_URL = 'https://api.transitfm.io/v1';\n\nconst headers = {\n  'Content-Type': 'application/json',\n  'Authorization': `Bearer ${API_KEY}`\n};\n\n// Work Order Data\nconst workOrderData = {\n  title: 'HVAC Filter Replacement - Building A',\n  description: 'Replace main HVAC filter in Building A with MERV-13 rated filter. Check filter pressure drop gauge and document readings.',\n  facility_id: 'fac-789',\n  category: 'preventive',\n  priority: 'medium',\n  assigned_to_id: 'user-456',\n  estimated_hours: 1.5,\n  due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),\n  notes: 'Use MERV-13 filters. Building A main entrance lobby. Contact facility manager before starting work.'\n};\n\n// Create Work Order\naxios.post(`${BASE_URL}/work-orders`, workOrderData, { headers })\n  .then(response => {\n    const createdWO = response.data;\n    console.log(`Work Order Created: ${createdWO.id}`);\n    console.log(`Status: ${createdWO.status}`);\n    console.log(`Assigned To: ${createdWO.assigned_to.name}`);\n  })\n  .catch(error => {\n    console.error(`Error: ${error.response.status}`);\n    console.error(error.response.data);\n  });",
+  "notes": [
+    "Replace 'YOUR_API_KEY' with your actual API key from settings",
+    "Verify that the facility_id and assigned_to_id exist in your system",
+    "Use valid ISO 8601 format for due_date",
+    "Priority values: critical, high, medium, low",
+    "Category values: preventive, corrective, improvement",
+    "Status is automatically set to 'open' when creating a work order",
+    "Response includes the generated work order number (WO-YYYY-NNNNN format)"
+  ],
+  "related_endpoints": [
+    "/work-orders/{id} - Get work order details",
+    "/work-orders/{id} - Update work order",
+    "/work-orders/{id}/status - Update work order status",
+    "/work-orders/{id}/notes - Add notes to work order"
+  ]
+}
